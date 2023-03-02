@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/18759005/how-to-make-a-lib-file-from-a-vbscript
+
+https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/windows-scripting/07zhfkh8(v=vs.84)?redirectedfrom=MSDN
+
+COM file
