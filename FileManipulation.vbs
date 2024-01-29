@@ -1,8 +1,9 @@
 Option Explicit
 On Error Resume Next
 'CLASS OBJECT : https://www.tutorialspoint.com/vbscript/vbscript_class_objects.htm
-'call test()
-
+call test()
+'To USE ME call the add a "include" sub inside the main script like the one at the bottom of this page
+'Include "".\FileManipulation.vbs"
 
 Class FileManipulation
 
@@ -157,6 +158,17 @@ Class FileManipulation
         Call ErrorHandler
     end function
 
+    function FileExists(fileToTest)
+        'source : https://www.tachytelic.net/2017/10/function-check-file-exists-vbscript/
+        Dim fso
+        Set fso = CreateObject("Scripting.FileSystemObject")
+        If fso.FileExists(fileToTest) Then
+            FileExists=true
+        Else
+            FileExists=false
+        End If
+    End Function
+
     Private Function ErrorHandler()
         If Err.Number <> 0 Then
             ' MsgBox or whatever. You may want to display or log your error there
@@ -198,33 +210,37 @@ end class
 '---------TESTING-----------
 function test()
 
-Dim fileManip
-set fileManip = new FileManipulation
+    Dim fileManip
+    set fileManip = new FileManipulation
 
-Dim activefolder
-activefolder = fileManip.getPathWhereScriptIsRun()
-WScript.Echo "The script is run from: " & activefolder
+    Dim activefolder
+    activefolder = fileManip.getPathWhereScriptIsRun()
+    WScript.Echo "[TESTING] The script is run from: " & activefolder
 
-Dim userFolder
-userFolder = fileManip.getUserFolder()
-WScript.Echo "User's home folder is: " & userFolder
+    Dim userFolder
+    userFolder = fileManip.getUserFolder()
+    WScript.Echo "[TESTING] User's home folder is: " & userFolder
+    WScript.Echo "[TESTING RESULT] getFolderFromPath: " & fileManip.getFolderFromPath(userFolder & "\Downloads\").path
 
-WScript.Echo "getFolderFromPath: " & fileManip.getFolderFromPath(userFolder & "\Downloads\").path
+    'filePresence
+    WScript.Echo "[TESTING] if file exist <.\VBsLib\renameMe.txt> "
+    Dim filePresence
+    filePresence = fileManip.FileExists(".\VBsLib\renameMe.txt")
+    WScript.Echo "[TESTING RESULT] file exist " & filePresence
 
-Dim file, files, path
-path = userFolder&"\Downloads"
-set files = fileManip.FileFinder(path,false,1)
-For each file in files
-    WScript.Echo "File found: " & file
-Next
+    Dim file, files, path
+    path = ".\VBsLib\"
+    set files = fileManip.FileFinder(path,false,1)
+    For each file in files
+        WScript.Echo "[TESTING] File found: " & file
+    Next
 
-Dim filePathToRename
-filepathToRename = "W:\Utilisateurs\LeroyP\05_Automatisation de taches\07_Bash script\Lib\renameMe.txt"
-fileManip.renameFileTo filepathToRename, "RenameMe.txt"
-fileManip.renameFileTo filepathToRename, "renameMe.txt"
+    Dim filePathToRename
+    filepathToRename = ".\VBsLib\renameMe.txt"
+    fileManip.renameFileTo filepathToRename, "RenameMe.txt"
+    fileManip.renameFileTo filepathToRename, "renameMe.txt"
 
-Dim moveFileTo
-moveFileTo = "W:\Utilisateurs\LeroyP\05_Automatisation de taches\07_Bash script"
-fileManip.moveFileTo filepathToRename, movefileTo
-fileManip.moveFileTo moveFileTo&"\renameMe.txt", "W:\Utilisateurs\LeroyP\05_Automatisation de taches\07_Bash script\Lib"
+    Dim moveFileTo
+    fileManip.moveFileTo filepathToRename, movefileTo
+    fileManip.moveFileTo ".\VBsLib\renameMe.txt", "..\"
 end function

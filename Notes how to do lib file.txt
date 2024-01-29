@@ -3,3 +3,23 @@ https://stackoverflow.com/questions/18759005/how-to-make-a-lib-file-from-a-vbscr
 https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/windows-scripting/07zhfkh8(v=vs.84)?redirectedfrom=MSDN
 
 COM file
+
+' Lib.vbs - simple VBScript library/module
+' use
+'  ExecuteGlobal goFS.OpenTextFile(<PathTo\Lib.vbs>).ReadAll()
+' to 'include' Lib.vbs in you main script
+
+    Private Sub Include( scriptName )
+        WScript.Echo "[LOADING]: "&scriptName
+        Dim sScript
+        Dim oStream
+        With CreateObject( "Scripting.FileSystemobject" )
+            Set oStream = .OpenTextFile(scriptName)
+        End With
+        sScript = oStream.ReadAll()
+        oStream.Close
+        ExecuteGlobal sScript
+        WScript.Echo "[LOADED]: "&scriptName
+
+        Call ErrorHandler
+    End Sub
