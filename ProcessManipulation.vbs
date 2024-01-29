@@ -66,7 +66,7 @@ Class ProcessManipulation
             Next
         Next
         if (matchtitle = false) then
-            wscript.echo "Could not find process with title matching, '" & srchstr & "'"
+            wscript.echo "[PROCESSMANIPULATION] matchTitle : Could not find process with title matching, '" & srchstr & "'"
             'wscript.quit
         end if
     End Function
